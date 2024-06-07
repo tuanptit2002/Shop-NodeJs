@@ -21,6 +21,15 @@ router.get('/products' , async (req, res) => {
     }
 })
 
+router.get ('/products/:id', async (req, res) => {
+    try {
+        const _id = req.params.id;
+        const product = await Product.find({_id});
+        res.send(product) ;
+    }catch (e) {
+        res.status(400).send(e)
+    }
+})
 router.put('/products/:id', async (req,res) =>{
     const updates = Object.keys(req.body);
     const allowedUpdates = ['name', 'price', 'count', 'description', 'image'];

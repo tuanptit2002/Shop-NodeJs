@@ -2,13 +2,27 @@ const express = require('express')
 const User = require('../models/user')
 const auth = require('../middlerware/auth')
 const router = new express.Router();
+const Cart =  require('../models/cart')
+const passport = require('passport')
+
+
+
+router.get('/auth/google', passport.authenticate('google', {scope: ['email', 'profile']}))
+
+router.get('/auth/google/callback',
+    passport.authenticate('google', { failureRedirect: 'http://localhost:3000' }),
+    (req, res) => {
+      res.redirect('http://localhost:5173/');
+    }
+  );
 
 router.post('/users', async(req, res) =>{
-    console.log(req.body)
     const user = new User(req.body)
     try {
         await user.save();
-        const token = await user.generateAuthToken()
+        const token = await user.generateAuthToken();
+        console.log(user._id)
+        await Cart.createCart(user._id.toHexString())
         res.status(200).send({user, token});
     }catch(e){
         res.send(e)
@@ -24,6 +38,8 @@ router.post('/user/login', async (req, res) =>{
 }
         
 })
+
+
 
 router.post('/users/logout', auth, async(req,res) => {
         try{
