@@ -32,12 +32,14 @@ router.get ('/products/:id', async (req, res) => {
 })
 router.put('/products/:id', async (req,res) =>{
     const updates = Object.keys(req.body);
-    const allowedUpdates = ['name', 'price', 'count', 'description', 'image'];
+    console.log(req.body)
+    const allowedUpdates = ['name', 'price', 'count', 'desciption', 'image', 'rating'];
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
     if(!isValidOperation){
         return res.status(400).send({error: 'Invalid updates'});
     }
     const _id = req.params.id;
+    console.log(_id)
     try{
         const product  = await Product.findById({_id});
         updates.forEach((update) => product[update] = req.body[update])

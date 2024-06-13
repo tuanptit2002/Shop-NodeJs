@@ -22,6 +22,7 @@ app.use(function(req, res, next) {
     saveUninitialized: true
   }));
   app.use(cors({ origin: 'http://localhost:8080', credentials: true }));
+  app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
   app.use(passport.initialize());
   app.use(passport.session());
 app.use(express.json())
